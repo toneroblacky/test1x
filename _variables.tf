@@ -45,3 +45,8 @@ variable "environments" {
     production = "production"
   }
 }
+
+variable "vault_token" {
+  type        = string
+  description = "Vault token for authentication"
+}
