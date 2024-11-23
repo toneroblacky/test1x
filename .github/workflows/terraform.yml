@@ -7,6 +7,11 @@ on:
       - production
   workflow_dispatch:
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: "eu-west-1"
+
 jobs:
   terraform:
     name: Terraform Workflow
@@ -26,7 +31,7 @@ jobs:
         terraform init -reconfigure \
           -backend-config="bucket=bootcampterraform" \
           -backend-config="key=${{ github.ref_name }}/terraform.tfstate" \
-          -backend-config="region=eu-west-1" \
+          -backend-config="region=${{ env.AWS_REGION }}" \
           -backend-config="dynamodb_table=terraform-locks" \
           -backend-config="encrypt=true"
 
@@ -59,7 +64,7 @@ jobs:
         terraform init -reconfigure \
           -backend-config="bucket=bootcampterraform" \
           -backend-config="key=${{ github.ref_name }}/terraform.tfstate" \
-          -backend-config="region=eu-west-1" \
+          -backend-config="region=${{ env.AWS_REGION }}" \
           -backend-config="dynamodb_table=terraform-locks" \
           -backend-config="encrypt=true"
 
