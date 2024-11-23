@@ -29,7 +29,7 @@ jobs:
     - name: Terraform Init
       run: |
         terraform init -reconfigure \
-          -backend-config="bucket=bootcampterraform" \
+          -backend-config="bucket=bootcampusers" \
           -backend-config="key=${{ github.ref_name }}/terraform.tfstate" \
           -backend-config="region=${{ env.AWS_REGION }}" \
           -backend-config="dynamodb_table=terraform-locks" \
@@ -62,7 +62,7 @@ jobs:
     - name: Terraform Init
       run: |
         terraform init -reconfigure \
-          -backend-config="bucket=bootcampterraform" \
+          -backend-config="bucket=bootcampusers" \
           -backend-config="key=${{ github.ref_name }}/terraform.tfstate" \
           -backend-config="region=${{ env.AWS_REGION }}" \
           -backend-config="dynamodb_table=terraform-locks" \
