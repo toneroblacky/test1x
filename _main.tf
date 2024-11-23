@@ -3,7 +3,7 @@ terraform {
     bucket         = "bootcampterraform"  
     key            = "${terraform.workspace}/terraform.tfstate" 
     region         = "eu-west-1"  
-    dynamodb_table = "terraform-locks" 
+    dynamodb_table = "terraform-lockss" 
     encrypt        = true  
   }
 }
