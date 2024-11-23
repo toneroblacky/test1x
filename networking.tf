@@ -50,9 +50,9 @@ resource "aws_route_table_association" "public" {
 
 # Elastic IP for NAT Gateway
 resource "aws_eip" "nat" {
-  domain = "vpc" 
   tags = merge(local.tags, { Name = "bootcamp-nat-eip-${terraform.workspace}" })
 }
+
 
 # NAT Gateway for Private Subnet
 resource "aws_nat_gateway" "nat" {
