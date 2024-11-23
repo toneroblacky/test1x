@@ -1,7 +1,7 @@
 variable "aws_account_ids" {
     type = map(string)
     default = {
-        development = "767828723672"
+        develop = "767828723672"
         production  = "412381738156"
     }
 }
@@ -9,7 +9,7 @@ variable "aws_account_ids" {
 variable "vpc_cidr" {
     type = map(string)
     default = {
-        development = "10.0.0.0/16"
+        develop = "10.0.0.0/16"
         production  = "11.0.0.0/16"
     }
 }
@@ -25,7 +25,7 @@ variable "vpc_cidr" {
 variable "public_subnets" {
   type = map(string)
   default = {
-    development = "10.0.1.0/24"
+    develop = "10.0.1.0/24"
     production  = "11.0.1.0/24"
   }
 }
@@ -33,7 +33,7 @@ variable "public_subnets" {
 variable "private_subnets" {
   type = map(string)
   default = {
-    development = "10.0.2.0/24"
+    develop = "10.0.2.0/24"
     production  = "11.0.2.0/24"
   }
 }
@@ -41,7 +41,7 @@ variable "private_subnets" {
 variable "environments" {
   type = map(string)
   default = {
-    development = "development"
+    develop = "development"
     production = "production"
   }
 }
