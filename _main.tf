@@ -1,12 +1,11 @@
 terraform {
-  backend "vault" {
-    address = "https://vault-cluster-public-vault-249803a1.b1903010.z1.hashicorp.cloud:8200"
-    path    = data.vault_generic_secret.backend.data["path"]
-    token   = var.vault_token # Vault token stored in GitHub Actions secrets
+  backend "s3" {
+    bucket         = "bootcampterraform"  
+    key            = "${terraform.workspace}/terraform.tfstate" 
+    region         = "eu-west-1"  
+    dynamodb_table = "terraform-locks" 
+    encrypt        = true  
   }
-}
-provider "vault" {
-    address = "https://vault-cluster-public-vault-249803a1.b1903010.z1.hashicorp.cloud:8200"
 }
 
 provider "aws" {

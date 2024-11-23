@@ -7,10 +7,6 @@ on:
       - production
   workflow_dispatch:
 
-env:
-  VAULT_ADDR: ${{ secrets.VAULT_ADDRESS }}
-  VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-
 jobs:
   terraform:
     name: Terraform Workflow
@@ -28,23 +24,21 @@ jobs:
     - name: Terraform Init
       run: |
         terraform init -reconfigure \
-          -backend-config="address=${{ secrets.VAULT_ADDRESS }}" \
-          -backend-config="path=secret/terraform/${{ github.ref_name == 'production' && 'production' || github.ref_name }}-backend" \
-          -backend-config="token=${{ secrets.VAULT_TOKEN }}"
+          -backend-config="bucket=bootcampterraform" \
+          -backend-config="key=${{ github.ref_name }}/terraform.tfstate" \
+          -backend-config="region=eu-west-1" \
+          -backend-config="dynamodb_table=terraform-locks" \
+          -backend-config="encrypt=true"
 
     - name: Terraform Workspace
       run: |
-        if [[ "${{ github.ref_name }}" == "production" ]]; then
-          terraform workspace select production || terraform workspace new production
-        else
-          terraform workspace select ${{ github.ref_name }} || terraform workspace new ${{ github.ref_name }}
-        fi
+        terraform workspace select ${{ github.ref_name }} || terraform workspace new ${{ github.ref_name }}
 
     - name: Terraform Validate
       run: terraform validate
 
     - name: Terraform Plan
-      run: terraform plan -var="vault_token=${{ secrets.VAULT_TOKEN }}" -out=plan.tfplan
+      run: terraform plan -out=plan.tfplan
 
   apply:
     name: Terraform Apply
@@ -63,17 +57,15 @@ jobs:
     - name: Terraform Init
       run: |
         terraform init -reconfigure \
-          -backend-config="address=${{ secrets.VAULT_ADDRESS }}" \
-          -backend-config="path=secret/terraform/${{ github.ref_name == 'production' && 'production' || github.ref_name }}-backend" \
-          -backend-config="token=${{ secrets.VAULT_TOKEN }}"
+          -backend-config="bucket=bootcampterraform" \
+          -backend-config="key=${{ github.ref_name }}/terraform.tfstate" \
+          -backend-config="region=eu-west-1" \
+          -backend-config="dynamodb_table=terraform-locks" \
+          -backend-config="encrypt=true"
 
     - name: Terraform Workspace
       run: |
-        if [[ "${{ github.ref_name }}" == "production" ]]; then
-          terraform workspace select production || terraform workspace new production
-        else
-          terraform workspace select ${{ github.ref_name }} || terraform workspace new ${{ github.ref_name }}
-        fi
+        terraform workspace select ${{ github.ref_name }} || terraform workspace new ${{ github.ref_name }}
 
     - name: Terraform Apply (Manual)
       run: terraform apply plan.tfplan
